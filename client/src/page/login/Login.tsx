@@ -1,6 +1,9 @@
+import { usePostLogin } from "@Api/auth/hook";
 import InputField from "@Component/InputField";
 import { stringSchema } from "@Utils/schema";
 import { useFormik } from "formik";
+import { Link, useNavigate } from "react-router-dom";
+import { LoginRequest } from "type/auth";
 import * as Yup from "yup";
 
 const initialValues = {
@@ -10,7 +13,7 @@ const initialValues = {
 
 const validationSchema = Yup.object({
   userName: stringSchema("UserName is Required"),
-  password: stringSchema("Password is Required"),
+  password: stringSchema("Password is Required").min(6),
 });
 
 const fields = [
@@ -23,12 +26,21 @@ const fields = [
 ];
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { mutate } = usePostLogin(sucessCb);
+
+  function sucessCb() {
+    navigate("/");
+  }
+
+  const onSubmit = (values: LoginRequest) => {
+    mutate(values);
+  };
+
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit,
   });
 
   return (
@@ -45,15 +57,19 @@ const Login = () => {
               key={field.name}
               name={field.name}
               label={field.label}
+              error={formik.errors[field.name as keyof typeof formik.errors]}
               value={formik.values[field.name as keyof typeof formik.values]}
               onChange={formik.handleChange}
               type={field.type || "text"}
               placeholder={`Enter your ${field.label}`}
             />
           ))}
-          <a className="text-sm mt-2 inline-block hover:text-blue-500 hover:underline">
+          <Link
+            to="/signUp"
+            className="text-sm mt-2 inline-block hover:text-blue-500 hover:underline"
+          >
             Don't have an account?
-          </a>
+          </Link>
           <button
             type="submit"
             className="w-full p-2 mt-4 font-semibold text-white bg-blue-500 rounded-md"

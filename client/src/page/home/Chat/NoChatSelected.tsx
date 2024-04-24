@@ -1,4 +1,4 @@
-import { TiMessage } from "react-icons/ti";
+import { TiMessages } from "react-icons/ti";
 
 const NoChatSelected = () => {
   return (
@@ -6,7 +6,7 @@ const NoChatSelected = () => {
       <div className="px-4 text-center sm:text-lg md:text-xl text-gray-200 font-semibold flex flex-col items-center gap-3">
         <p>Welcome 👋 Jeff Zhu ❄️</p>
         <p>Select a chat to start messaging</p>
-        <TiMessage className="text-3xl md:text-6xl text-center" />
+        <TiMessages className="text-3xl md:text-6xl text-center" />
       </div>
     </div>
   );

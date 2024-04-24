@@ -24,6 +24,7 @@
       "@Component/*": ["component/*"],
       "@Utils/*": ["utils/*"],
       "@Page/*": ["page/*"],
+      "@Api/*": ["api/*"],
     }
   },
   "include": ["src"],
