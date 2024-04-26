@@ -3,8 +3,10 @@ import InputField from "@Component/InputField";
 import { stringSchema } from "@Utils/schema";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
-import { LoginRequest } from "type/auth";
+import { ApiResponse } from "type/apiResponse";
+import { LoginRequest, LoginResponse } from "type/auth";
 import * as Yup from "yup";
+import { useAuth } from "zustand/token";
 
 const initialValues = {
   userName: "",
@@ -27,10 +29,12 @@ const fields = [
 
 const Login = () => {
   const navigate = useNavigate();
+  const { saveId } = useAuth();
   const { mutate } = usePostLogin(sucessCb);
 
-  function sucessCb() {
+  function sucessCb(res: ApiResponse<LoginResponse>) {
     navigate("/");
+    saveId(res.data._id);
   }
 
   const onSubmit = (values: LoginRequest) => {

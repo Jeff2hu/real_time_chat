@@ -10,3 +10,8 @@ export type LoginRequest = {
   userName: string;
   password: string;
 };
+
+export type LoginResponse = Record<
+  "_id" | "fullName" | "userName" | "profilePic",
+  string
+>;
