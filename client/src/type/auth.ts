@@ -11,7 +11,11 @@ export type LoginRequest = {
   password: string;
 };
 
-export type LoginResponse = Record<
-  "_id" | "fullName" | "userName" | "profilePic",
-  string
->;
+export type AuthResponseKey =
+  | "_id"
+  | "fullName"
+  | "userName"
+  | "profilePic"
+  | "jwt";
+
+export type AuthResponse = Record<AuthResponseKey, string>;

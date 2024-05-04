@@ -1,21 +1,23 @@
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { ApiResponse } from "type/apiResponse";
-import { LoginResponse } from "type/auth";
+import { AuthResponse } from "type/auth";
 import { postLogin, postSignUp } from "./api";
 
-export const usePostSignUp = (successCb: () => void) => {
+export const usePostSignUp = (
+  successCb: (res: ApiResponse<AuthResponse>) => void
+) => {
   return useMutation({
     mutationFn: postSignUp,
     onSuccess: (res) => {
       toast.success(res.message);
-      successCb();
+      successCb(res);
     },
   });
 };
 
 export const usePostLogin = (
-  onSuccess: (res: ApiResponse<LoginResponse>) => void
+  onSuccess: (res: ApiResponse<AuthResponse>) => void
 ) => {
   return useMutation({
     mutationFn: postLogin,

@@ -3,10 +3,13 @@ import { useFormik } from "formik";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { SignUpRequest } from "type/auth";
+import { ApiResponse } from "type/apiResponse";
+import { AuthResponse, SignUpRequest } from "type/auth";
 import * as Yup from "yup";
 import InputField from "../../component/InputField";
 import { stringSchema } from "../../utils/schema";
+import { useAuth } from "../../zustand/useAuth";
+import { useJwt } from "../../zustand/useJwt";
 import GenderCheckBox from "./GenderCheckBox";
 
 const initialValues = {
@@ -40,11 +43,17 @@ const fields = [
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const { setJwt } = useJwt();
+  const { setAuth } = useAuth();
   const { mutate } = usePostSignUp(successCb);
   const [genderSelected, setGenderSelected] = useState<number>(1);
 
-  function successCb() {
-    navigate("/login");
+  function successCb(res: ApiResponse<AuthResponse>) {
+    navigate("/");
+    setJwt(res.data.jwt);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { jwt, _id, ...newData } = res.data;
+    setAuth(newData);
   }
 
   const genderSelectedHandler = useCallback((index: number) => {

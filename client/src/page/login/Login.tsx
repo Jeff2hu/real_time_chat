@@ -4,9 +4,10 @@ import { stringSchema } from "@Utils/schema";
 import { useFormik } from "formik";
 import { Link, useNavigate } from "react-router-dom";
 import { ApiResponse } from "type/apiResponse";
-import { LoginRequest, LoginResponse } from "type/auth";
+import { AuthResponse, LoginRequest } from "type/auth";
 import * as Yup from "yup";
-import { useAuth } from "zustand/token";
+import { useAuth } from "../../zustand/useAuth";
+import { useJwt } from "../../zustand/useJwt";
 
 const initialValues = {
   userName: "",
@@ -29,12 +30,16 @@ const fields = [
 
 const Login = () => {
   const navigate = useNavigate();
-  const { saveId } = useAuth();
-  const { mutate } = usePostLogin(sucessCb);
+  const { setJwt } = useJwt();
+  const { setAuth } = useAuth();
+  const { mutate } = usePostLogin(successCb);
 
-  function sucessCb(res: ApiResponse<LoginResponse>) {
+  function successCb(res: ApiResponse<AuthResponse>) {
     navigate("/");
-    saveId(res.data._id);
+    setJwt(res.data.jwt);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { jwt, _id, ...newData } = res.data;
+    setAuth(newData);
   }
 
   const onSubmit = (values: LoginRequest) => {

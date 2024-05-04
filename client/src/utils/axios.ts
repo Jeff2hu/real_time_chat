@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
+import { useJwt } from "../zustand/useJwt";
 
 const AXIOS = axios.create({
   baseURL: "http://localhost:5000/api",
@@ -7,6 +8,10 @@ const AXIOS = axios.create({
 
 AXIOS.interceptors.request.use(
   (config) => {
+    const { jwt } = useJwt.getState();
+    if (jwt) {
+      config.headers.Authorization = `Bearer ${jwt}`;
+    }
     return config;
   },
   (err) => {
