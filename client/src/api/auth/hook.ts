@@ -5,7 +5,8 @@ import { AuthResponse } from "type/auth";
 import { postLogin, postSignUp } from "./api";
 
 export const usePostSignUp = (
-  successCb: (res: ApiResponse<AuthResponse>) => void
+  successCb: (res: ApiResponse<AuthResponse>) => void,
+  onError: () => void
 ) => {
   return useMutation({
     mutationFn: postSignUp,
@@ -13,14 +14,24 @@ export const usePostSignUp = (
       toast.success(res.message);
       successCb(res);
     },
+    onError: () => {
+      onError();
+    },
   });
 };
 
 export const usePostLogin = (
-  onSuccess: (res: ApiResponse<AuthResponse>) => void
+  onSuccess: (res: ApiResponse<AuthResponse>) => void,
+  onError: () => void
 ) => {
   return useMutation({
     mutationFn: postLogin,
-    onSuccess,
+    onSuccess: (res) => {
+      toast.success(res.message);
+      onSuccess(res);
+    },
+    onError: () => {
+      onError();
+    },
   });
 };

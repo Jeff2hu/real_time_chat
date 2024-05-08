@@ -25,6 +25,7 @@
       "@Utils/*": ["utils/*"],
       "@Page/*": ["page/*"],
       "@Api/*": ["api/*"],
+      "@Zustand/*": ["zustand/*"],
     }
   },
   "include": ["src"],

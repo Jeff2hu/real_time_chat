@@ -1,4 +1,5 @@
 import { usePostSignUp } from "@Api/auth/hook";
+import Loading from "@Component/Loading";
 import { useFormik } from "formik";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
@@ -45,8 +46,10 @@ const SignUp = () => {
   const navigate = useNavigate();
   const { setJwt } = useJwt();
   const { setAuth } = useAuth();
-  const { mutate } = usePostSignUp(successCb);
-  const [genderSelected, setGenderSelected] = useState<number>(1);
+  const { mutate } = usePostSignUp(successCb, errorCb);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [genderSelected, setGenderSelected] = useState(1);
 
   function successCb(res: ApiResponse<AuthResponse>) {
     navigate("/");
@@ -54,6 +57,10 @@ const SignUp = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { jwt, _id, ...newData } = res.data;
     setAuth(newData);
+  }
+
+  function errorCb() {
+    setIsLoading(false);
   }
 
   const genderSelectedHandler = useCallback((index: number) => {
@@ -65,6 +72,8 @@ const SignUp = () => {
       toast.error("Password and ConfirmPassword must be the same");
       return;
     }
+
+    setIsLoading(true);
 
     mutate({
       fullName: values.fullName,
@@ -114,9 +123,10 @@ const SignUp = () => {
           </Link>
           <button
             type="submit"
-            className="w-full p-2 mt-4 font-semibold text-white bg-blue-500 rounded-md"
+            className="w-full p-2 mt-4 font-semibold text-white rounded-md bg-blue-500"
+            disabled={isLoading}
           >
-            Login
+            {isLoading ? <Loading /> : "SignUp"}
           </button>
         </form>
       </div>

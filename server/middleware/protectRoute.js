@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import User from "../db/models/USER.js";
 
 const protectRoute = async (req, res, next) => {
@@ -8,13 +9,13 @@ const protectRoute = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const jwt = authHeader.substring(7);
+    const _jwt = authHeader.substring(7);
 
-    if (!jwt) {
+    if (!_jwt) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(_jwt, process.env.JWT_SECRET);
 
     if (!decoded) {
       return res.status(401).json({ message: "Unauthorized" });

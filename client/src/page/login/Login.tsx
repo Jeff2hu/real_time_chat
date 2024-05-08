@@ -1,7 +1,9 @@
 import { usePostLogin } from "@Api/auth/hook";
 import InputField from "@Component/InputField";
+import Loading from "@Component/Loading";
 import { stringSchema } from "@Utils/schema";
 import { useFormik } from "formik";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ApiResponse } from "type/apiResponse";
 import { AuthResponse, LoginRequest } from "type/auth";
@@ -32,7 +34,9 @@ const Login = () => {
   const navigate = useNavigate();
   const { setJwt } = useJwt();
   const { setAuth } = useAuth();
-  const { mutate } = usePostLogin(successCb);
+  const { mutate } = usePostLogin(successCb, errorCb);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   function successCb(res: ApiResponse<AuthResponse>) {
     navigate("/");
@@ -42,7 +46,12 @@ const Login = () => {
     setAuth(newData);
   }
 
+  function errorCb() {
+    setIsLoading(false);
+  }
+
   const onSubmit = (values: LoginRequest) => {
+    setIsLoading(true);
     mutate(values);
   };
 
@@ -81,9 +90,10 @@ const Login = () => {
           </Link>
           <button
             type="submit"
-            className="w-full p-2 mt-4 font-semibold text-white bg-blue-500 rounded-md"
+            className="w-full p-2 mt-4 font-semibold text-white rounded-md bg-blue-500"
+            disabled={isLoading}
           >
-            Login
+            {isLoading ? <Loading /> : "Login"}
           </button>
         </form>
       </div>

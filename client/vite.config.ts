@@ -23,6 +23,7 @@ export default defineConfig({
       "@Utils": resolve("src/utils"),
       "@Api": resolve("src/api"),
       "@Page": resolve("src/page"),
+      "@Zustand": resolve("src/zustand"),
     },
   },
 });

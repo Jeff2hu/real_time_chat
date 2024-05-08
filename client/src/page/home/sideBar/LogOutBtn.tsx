@@ -10,7 +10,7 @@ const LogOutBtn = () => {
   };
 
   return (
-    <div className="mt-auto">
+    <div className="mt-4">
       <button className="cursor-pointer" onClick={logOutHandler}>
         <BiLogOut className="w-6 h-6 text-white" />
       </button>
