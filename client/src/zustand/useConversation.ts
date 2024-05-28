@@ -5,7 +5,7 @@ type Conversation = {
   messages: string[];
   setMessages: (messages: string[]) => void;
   selectedConversation: User | null;
-  setSelectedConversation: (selectedConversation: User) => void;
+  setSelectedConversation: (selectedConversation: User | null) => void;
 };
 
 const useConversation = create<Conversation>((set) => ({
